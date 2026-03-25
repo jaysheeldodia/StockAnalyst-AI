@@ -1,0 +1,1 @@
+"""Stock analyst application package."""

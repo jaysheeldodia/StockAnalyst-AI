@@ -1,0 +1,65 @@
+## Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+## Virtual environments
+.venv/
+venv/
+ENV/
+env/
+virtualenv/
+
+## Build / packaging artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+pip-wheel-metadata/
+share/python-wheels/
+develop-eggs/
+eggs/
+sdist/
+parts/
+var/
+
+## Test / tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+
+## Type checker / IDE
+.dmypy.json
+.pyre/
+
+.vscode/
+.idea/
+*.iml
+
+## Jupyter
+.ipynb_checkpoints/
+
+## Environment variables (keep examples)
+.env
+.env.*
+!.env.example
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Local app data (generated / persistent stores)
+data/chroma/
+data/chroma.sqlite3
+data/**/*.db
+data/**/*.sqlite3
+
+## Logs & temp files
+*.log
+*.tmp
+

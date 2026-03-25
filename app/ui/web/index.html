@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Analyst</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <span class="logo-dot"></span>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">Stock Analyst</div>
+          <div class="brand-sub">RAG + LLM research • live market snapshot</div>
+        </div>
+      </div>
+      <div class="right-meta">
+        <span class="pill" id="dataPill">Data: live</span>
+        <button id="themeToggle" class="pill" type="button" aria-label="Toggle theme">Theme</button>
+        <a class="pill pill-link" href="/health" target="_blank" rel="noreferrer">Health</a>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel inputs">
+        <div class="panel-title">Run research</div>
+
+        <label class="field">
+          <span class="label">Ticker</span>
+          <input id="tickerInput" class="input" value="AAPL" maxlength="10" autocomplete="off" />
+        </label>
+
+        <label class="field">
+          <span class="label">Horizon</span>
+          <select id="horizonInput" class="select">
+            <option value="1m">1m</option>
+            <option value="3m">3m</option>
+            <option value="6m">6m</option>
+            <option value="12m" selected>12m</option>
+            <option value="24m">24m</option>
+          </select>
+        </label>
+
+        <div class="actions">
+          <button id="runBtn" class="btn btn-primary" type="button">Run analysis</button>
+          <button id="cancelBtn" class="btn btn-ghost" type="button" disabled>Cancel</button>
+        </div>
+
+        <div class="status" id="statusBox" role="status" aria-live="polite">
+          <div class="spinner" id="spinner" aria-hidden="true"></div>
+          <div class="status-text">
+            <div class="status-title">Idle</div>
+            <div class="status-sub">Enter a ticker and run the pipeline.</div>
+          </div>
+        </div>
+
+        <div class="hint">
+          This app derives signals from sources retrieved at run time. Market quote/profile comes from
+          `yfinance`, and News/Financial/Social come from Tavily/yfinance when their modes are `live`.
+        </div>
+      </section>
+
+      <section class="panel output" id="outputPanel">
+        <div class="panel-title">Dashboard</div>
+
+        <div class="grid-2">
+          <div class="card" id="marketCard">
+            <div class="card-title">Market snapshot</div>
+            <div class="skeleton" id="marketSkeleton"></div>
+            <div class="card-body" id="marketBody" hidden></div>
+          </div>
+        </div>
+
+        <div class="card recommendation-card" id="recCard">
+          <div class="card-title">Recommendation</div>
+          <div class="skeleton" id="recSkeleton"></div>
+          <div class="card-body" id="recBody" hidden>
+            <div class="rec-row">
+              <div class="rec-badge" id="recBadge">—</div>
+              <div class="rec-meta">
+                <div class="rec-kpi" id="thesisConf">Thesis confidence: —</div>
+                <div class="rec-small" id="asOfLine">—</div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="mix-row">
+              <div class="mix-item">
+                <div class="mix-label">Buy</div>
+                <div class="mix-value" id="buyCount">0</div>
+              </div>
+              <div class="mix-item">
+                <div class="mix-label">Hold</div>
+                <div class="mix-value" id="holdCount">0</div>
+              </div>
+              <div class="mix-item">
+                <div class="mix-label">Sell</div>
+                <div class="mix-value" id="sellCount">0</div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <details class="details">
+              <summary>Signals by stance</summary>
+              <div class="stance-grid" id="stanceGrid"></div>
+            </details>
+          </div>
+        </div>
+
+        <div class="card report-card">
+          <div class="card-title">Analyst report</div>
+          <div class="skeleton" id="reportSkeleton"></div>
+          <article class="report" id="reportBody" hidden></article>
+        </div>
+
+        <details class="details" id="auditDetails">
+          <summary>Audit & disclaimers</summary>
+          <div class="audit-block">
+            <div class="subtle">Audit JSON</div>
+            <pre class="pre" id="auditPre">{}</pre>
+            <div class="divider"></div>
+            <div class="subtle">Legal disclaimer</div>
+            <div class="disclaimer" id="disclaimerBox"></div>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <script>
+      // Keep Markdown rendering predictable.
+      marked.setOptions({ breaks: true, gfm: true, headerIds: false });
+    </script>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+
