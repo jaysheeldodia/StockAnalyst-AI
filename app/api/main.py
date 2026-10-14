@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.api.schemas import AnalyzeRequest, AnalyzeResponse
+from app.api.schemas import AnalyzeRequest, AnalyzeResponse, retrieval_from_raw_results
 from app.services.analysis_service import AnalysisService
 
 app = FastAPI(title="Stock Analyst API", version="0.1.0")
@@ -34,7 +34,7 @@ async def health() -> dict[str, str]:
 @app.post("/analyze", response_model=AnalyzeResponse)
 async def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
     result = await service.analyze(request.ticker, horizon=request.horizon)
-    return AnalyzeResponse(**result)
+    return AnalyzeResponse(**result, retrieval=retrieval_from_raw_results(result["raw_results"]))
 
 
 @app.get("/stream/{ticker}")
