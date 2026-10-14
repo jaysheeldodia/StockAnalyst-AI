@@ -59,6 +59,10 @@ data/chroma.sqlite3
 data/**/*.db
 data/**/*.sqlite3
 
+## Evaluation outputs (baseline.json is committed; raw results are not)
+evals/results/
+evals/.cache/
+
 ## Logs & temp files
 *.log
 *.tmp
