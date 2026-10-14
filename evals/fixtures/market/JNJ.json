@@ -1,0 +1,35 @@
+{
+  "as_of_utc": "2026-10-14T23:38:29.087629+00:00",
+  "error": null,
+  "metrics": {
+    "debt_to_equity": 57.709,
+    "distance_from_52w_high_pct": -9.663071952855384,
+    "earnings_growth": -0.009,
+    "free_cashflow": 16885125120.0,
+    "gross_margins": 0.6814,
+    "market_cap": 611897311232.0,
+    "operating_margins": 0.2919,
+    "pe_forward": 21.644749,
+    "pe_trailing": 29.421785,
+    "position_in_52w_range_pct": 71.82865227892272,
+    "profit_margins": 0.21482,
+    "return_on_equity": 0.25742,
+    "revenue_growth": 0.066,
+    "ytd_return_pct": 24.424394268157968
+  },
+  "peer_context": "Sector **Healthcare**, industry **Drug Manufacturers - General**. For relative valuation, compare against large-cap peers in the same GICS sector/industry (peer list not auto-generated).",
+  "profile": {
+    "industry": "Drug Manufacturers - General",
+    "sector": "Healthcare"
+  },
+  "quote": {
+    "currency": "USD",
+    "name": "Johnson & Johnson",
+    "previous_close": 248.61,
+    "price": 253.91000366210938,
+    "week_52_high": 281.07,
+    "week_52_low": 184.66
+  },
+  "source": "yfinance",
+  "ticker": "JNJ"
+}
