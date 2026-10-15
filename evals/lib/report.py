@@ -115,6 +115,40 @@ def format_table(result: dict[str, Any]) -> str:
     return "\n".join(out)
 
 
+def _summary_rows(summary: dict[str, Any]) -> list[tuple[str, str]]:
+    rows = [(name, _fmt(summary["metrics"][name]["value"])) for name in DETERMINISTIC + JUDGED]
+    rows += [(f"latency_{q}", _fmt(summary["latency_s"][q], "s")) for q in ("p50", "p95", "p99")]
+    rows.append(("mean_usd_per_report", _fmt(summary["mean_usd_per_report"]["value"], "usd")))
+    rows.append(("mean_tokens_per_report", _fmt(summary["mean_tokens_per_report"]["value"], "int")))
+    rows.append(("failure_rate", _fmt(summary["failure_rate"]["value"])))
+    return rows
+
+
+def markdown_table(columns: dict[str, dict[str, Any]]) -> str:
+    """Markdown table with one value column per summary (e.g. before / after)."""
+    per_col = {label: dict(_summary_rows(s)) for label, s in columns.items()}
+    names = [name for name, _ in _summary_rows(next(iter(columns.values())))]
+    out = ["| metric | " + " | ".join(columns) + " |", "|---" * (len(columns) + 1) + "|"]
+    out += [f"| `{n}` | " + " | ".join(per_col[c][n] for c in columns) + " |" for n in names]
+    return "\n".join(out)
+
+
+def _load_summary(spec: str) -> tuple[str, dict[str, Any]]:
+    """spec is LABEL=PATH or LABEL=PATH#profile (for baseline.json)."""
+    label, _, target = spec.partition("=")
+    path, _, profile = target.partition("#")
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    if profile:
+        data = data["profiles"][profile]
+    return label, data["summary"]
+
+
+if __name__ == "__main__":
+    import sys
+
+    print(markdown_table(dict(_load_summary(s) for s in sys.argv[1:])))
+
+
 def write_result(result: dict[str, Any], out_dir: Path) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     meta = result["meta"]
