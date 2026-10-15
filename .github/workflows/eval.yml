@@ -21,6 +21,8 @@ env:
   FINANCIAL_DATA_MODE: mock
   SOCIAL_DATA_MODE: mock
   LANGCHAIN_TRACING_V2: "false"
+  # Latency is gated only against a baseline recorded on the same host label.
+  EVAL_HOST: github-ubuntu-latest
 
 jobs:
   smoke:

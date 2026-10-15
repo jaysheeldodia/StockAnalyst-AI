@@ -286,7 +286,12 @@ async def run(profile: str, max_cases: int | None, max_usd: float | None) -> dic
     summary["judge_usd_per_case"] = sum(judged_costs) / len(judged_costs) if judged_costs else None
     summary["total_usd"] = budget.spent
 
-    import ragas
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        ragas_version = version("ragas")
+    except PackageNotFoundError:
+        ragas_version = None
 
     meta = {
         "profile": profile,
@@ -302,7 +307,7 @@ async def run(profile: str, max_cases: int | None, max_usd: float | None) -> dic
         "judge_model": getattr(judge, "model", None),
         "judge_embedding_model": getattr(judge, "embedding_model", None),
         "judge_embedding_cost": "not counted (embedding tokens are not reported by Ragas)",
-        "ragas_version": ragas.__version__,
+        "ragas_version": ragas_version,
         "data_modes": {k.lower(): os.environ.get(k) for k in DATA_MODES},
         "market_data": "replayed fixtures (evals/fixtures/market)",
         "retrieval": cfg.retrieval.model_dump(),
@@ -310,6 +315,7 @@ async def run(profile: str, max_cases: int | None, max_usd: float | None) -> dic
         "max_cases": max_cases,
         "max_usd": max_usd,
         "python": platform.python_version(),
+        "host": os.getenv("EVAL_HOST") or f"{platform.system()}-{platform.machine()}",
     }
     return {"meta": meta, "summary": summary, "analyses": analyses, "cases": cases}
 

@@ -77,6 +77,18 @@ def test_missing_judged_metric_is_not_gated() -> None:
     assert _status(rows, "faithfulness") == "n/a"
 
 
+def test_latency_not_gated_across_hosts() -> None:
+    rows, failed = compare(_result(**{"latency_s.p95": 9.0}), _result(), same_host=False)
+    assert not failed
+    assert _status(rows, "latency_p95_s") == "n/a"
+
+
+def test_cost_still_gated_across_hosts() -> None:
+    slow = _result(**{"mean_usd_per_report": {"value": 0.02, "n": 5}})
+    _, failed = compare(slow, _result(), same_host=False)
+    assert failed
+
+
 def test_cost_rise_from_zero_fails() -> None:
     base = _result(mean_usd_per_report={"value": 0.0, "n": 5})
     rows, failed = compare(_result(), base)

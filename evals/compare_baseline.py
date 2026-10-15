@@ -47,8 +47,13 @@ def _fmt(v: float | None, digits: int = 3) -> str:
     return "n/a" if v is None else f"{v:.{digits}f}"
 
 
-def compare(result: dict[str, Any], baseline: dict[str, Any]) -> tuple[list[tuple], bool]:
-    """Return (rows, failed). Each row: metric, baseline, current, delta, rule, status."""
+def compare(
+    result: dict[str, Any], baseline: dict[str, Any], *, same_host: bool = True
+) -> tuple[list[tuple], bool]:
+    """Return (rows, failed). Each row: metric, baseline, current, delta, rule, status.
+
+    Latency is only gated when result and baseline ran on the same host label.
+    """
     rows: list[tuple] = []
     failed = False
     cur_s, base_s = result["summary"], baseline["summary"]
@@ -83,6 +88,8 @@ def compare(result: dict[str, Any], baseline: dict[str, Any]) -> tuple[list[tupl
             d = _pct_change(b, c)
             delta = f"{d:+.1f}%"
             status = ("FAIL" if d > P95_MAX_RISE_PCT else "PASS") if q == "p95" else "info"
+            if q == "p95" and not same_host:
+                rule, status = "not gated: different host", "n/a"
         failed |= status == "FAIL"
         rows.append((f"latency_{q}_s", _fmt(b, 2), _fmt(c, 2), delta, rule, status))
 
@@ -183,7 +190,11 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 2
 
-    rows, failed = compare(result, base)
+    result_host, base_host = result["meta"].get("host"), base["meta"].get("host")
+    same_host = result_host == base_host
+    if not same_host:
+        print(f"note: host differs (baseline={base_host!r}, result={result_host!r}); latency not gated")
+    rows, failed = compare(result, base, same_host=same_host)
     print(format_rows(rows))
     print("\nGATE: FAIL" if failed else "\nGATE: PASS")
     return 1 if failed else 0
