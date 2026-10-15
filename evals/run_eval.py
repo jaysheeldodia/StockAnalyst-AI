@@ -94,6 +94,8 @@ def _prior_costs(
         per_judge = s.get("judge_usd_per_case")
         if per_analysis is None and per_judge is None:
             continue
+        if agent_llm and not s["mean_tokens_per_report"]["value"]:
+            continue
         return per_analysis, per_judge, path.name
     return None, None, None
 
