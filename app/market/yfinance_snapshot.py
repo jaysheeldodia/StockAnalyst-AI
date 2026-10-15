@@ -67,7 +67,6 @@ def fetch_market_snapshot(ticker: str) -> dict[str, Any]:
 
         trailing_pe = _num(info.get("trailingPE"))
         forward_pe = _num(info.get("forwardPE"))
-        pe = trailing_pe if trailing_pe is not None else forward_pe
         mcap = _num(info.get("marketCap"))
 
         # Optional fundamentals for lightweight valuation heuristics.

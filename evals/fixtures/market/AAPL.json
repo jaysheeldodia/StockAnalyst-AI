@@ -1,0 +1,35 @@
+{
+  "as_of_utc": "2026-10-14T23:38:23.221825+00:00",
+  "error": null,
+  "metrics": {
+    "debt_to_equity": 78.445,
+    "distance_from_52w_high_pct": -1.4907392057796454,
+    "earnings_growth": 0.287,
+    "free_cashflow": 107721875456.0,
+    "gross_margins": 0.48653,
+    "market_cap": 5005219725312.0,
+    "operating_margins": 0.32623002,
+    "pe_forward": 35.760014,
+    "pe_trailing": 39.330273,
+    "position_in_52w_range_pct": 95.04439172641855,
+    "profit_margins": 0.27618998,
+    "return_on_equity": 1.4875101,
+    "revenue_growth": 0.164,
+    "ytd_return_pct": 26.89327996296442
+  },
+  "peer_context": "Sector **Technology**, industry **Consumer Electronics**. For relative valuation, compare against large-cap peers in the same GICS sector/industry (peer list not auto-generated).",
+  "profile": {
+    "industry": "Consumer Electronics",
+    "sector": "Technology"
+  },
+  "quote": {
+    "currency": "USD",
+    "name": "Apple Inc.",
+    "previous_close": 341.27,
+    "price": 342.9599914550781,
+    "week_52_high": 348.15,
+    "week_52_low": 243.42
+  },
+  "source": "yfinance",
+  "ticker": "AAPL"
+}

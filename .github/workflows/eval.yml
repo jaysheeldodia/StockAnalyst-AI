@@ -1,0 +1,131 @@
+name: eval
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      max_usd:
+        description: "EVAL_MAX_USD for the judged run"
+        default: "2.00"
+
+concurrency:
+  group: eval-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+env:
+  NEWS_DATA_MODE: mock
+  FINANCIAL_DATA_MODE: mock
+  SOCIAL_DATA_MODE: mock
+  LANGCHAIN_TRACING_V2: "false"
+  # Latency is gated only against a baseline recorded on the same host label.
+  EVAL_HOST: github-ubuntu-latest
+
+jobs:
+  smoke:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Cache Chroma embedding model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/chroma
+          key: chroma-onnx-v1
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Lint
+        run: make lint
+      - name: Test
+        run: make test
+      - name: Eval smoke and gate
+        shell: bash
+        run: |
+          mkdir -p evals/results
+          make eval-smoke 2>&1 | tee evals/results/smoke-output.txt
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-smoke-${{ github.sha }}
+          path: evals/results/
+          if-no-files-found: warn
+      - name: Comment results on the pull request
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'evals/results/smoke-output.txt';
+            const body_text = fs.existsSync(path) ? fs.readFileSync(path, 'utf8') : 'No eval output (the step did not run).';
+            const marker = '<!-- eval-harness-smoke -->';
+            const body = `${marker}\n### Eval smoke (${context.sha.slice(0, 7)})\n\n\`\`\`\n${body_text.slice(-60000)}\n\`\`\``;
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
+
+  judged:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      EVAL_JUDGE: "1"
+      EVAL_MAX_USD: ${{ github.event.inputs.max_usd || vars.EVAL_MAX_USD || '2.00' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Cache Chroma embedding model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/chroma
+          key: chroma-onnx-v1
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Require API key
+        shell: bash
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then echo "OPENAI_API_KEY secret is not set"; exit 1; fi
+      - name: Judged eval and gate
+        shell: bash
+        run: |
+          mkdir -p evals/results
+          { make eval && make eval-check; } 2>&1 | tee evals/results/judged-output.txt
+      - name: Job summary
+        if: always()
+        shell: bash
+        run: |
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat evals/results/judged-output.txt >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-judged-${{ github.run_id }}
+          path: evals/results/
+          if-no-files-found: warn

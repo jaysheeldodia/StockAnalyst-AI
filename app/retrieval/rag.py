@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 from typing import Any
 
 from app.config import get_config
@@ -8,6 +9,10 @@ from app.retrieval.hyde import build_hyde_query
 from app.storage.chroma_store import ChromaStore
 from app.live.financials import fetch_financial_docs
 from app.live.social_news import fetch_news_docs, fetch_social_docs
+
+
+def _text_id(text: str) -> str:
+    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:12]
 
 
 class RetrievalService:
@@ -48,7 +53,12 @@ class RetrievalService:
 
         # Ensure schema compatibility with existing RAG formatter.
         augmented: list[dict[str, Any]] = [
-            {"text": d.get("text") or "", "metadata": d.get("metadata") or {}, "distance": d.get("distance")}
+            {
+                "id": d.get("id") or _text_id(d.get("text") or ""),
+                "text": d.get("text") or "",
+                "metadata": d.get("metadata") or {},
+                "distance": d.get("distance"),
+            }
             for d in live_docs
         ]
         for a in augmented:

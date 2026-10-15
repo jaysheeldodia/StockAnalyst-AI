@@ -1,0 +1,35 @@
+{
+  "as_of_utc": "2026-10-14T23:38:25.642876+00:00",
+  "error": null,
+  "metrics": {
+    "debt_to_equity": null,
+    "distance_from_52w_high_pct": -8.518417795553379,
+    "earnings_growth": 0.099,
+    "free_cashflow": null,
+    "gross_margins": 0.0,
+    "market_cap": 890369605632.0,
+    "operating_margins": 0.42584,
+    "pe_forward": 13.206983,
+    "pe_trailing": 14.063758,
+    "position_in_52w_range_pct": 64.27917480468749,
+    "profit_margins": 0.34592,
+    "return_on_equity": 0.18013,
+    "revenue_growth": 0.102,
+    "ytd_return_pct": 4.994897168800749
+  },
+  "peer_context": "Sector **Financial Services**, industry **Banks - Diversified**. For relative valuation, compare against large-cap peers in the same GICS sector/industry (peer list not auto-generated).",
+  "profile": {
+    "industry": "Banks - Diversified",
+    "sector": "Financial Services"
+  },
+  "quote": {
+    "currency": "USD",
+    "name": "JPMorgan Chase & Co.",
+    "previous_close": 331.43,
+    "price": 335.2799987792969,
+    "week_52_high": 366.5,
+    "week_52_low": 279.1
+  },
+  "source": "yfinance",
+  "ticker": "JPM"
+}

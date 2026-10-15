@@ -1,0 +1,35 @@
+{
+  "as_of_utc": "2026-10-14T23:38:27.286064+00:00",
+  "error": null,
+  "metrics": {
+    "debt_to_equity": 15.921,
+    "distance_from_52w_high_pct": -0.2367161659043382,
+    "earnings_growth": 1.128,
+    "free_cashflow": 20671000576.0,
+    "gross_margins": 0.29767,
+    "market_cap": 727849500672.0,
+    "operating_margins": 0.15859,
+    "pe_forward": 15.25559,
+    "pe_trailing": 22.78121,
+    "position_in_52w_range_pct": 99.37350015936147,
+    "profit_margins": 0.09072,
+    "return_on_equity": 0.12584,
+    "revenue_growth": 0.441,
+    "ytd_return_pct": 47.216406980050365
+  },
+  "peer_context": "Sector **Energy**, industry **Oil & Gas Integrated**. For relative valuation, compare against large-cap peers in the same GICS sector/industry (peer list not auto-generated).",
+  "profile": {
+    "industry": "Oil & Gas Integrated",
+    "sector": "Energy"
+  },
+  "quote": {
+    "currency": "USD",
+    "name": "ExxonMobil Holdings Corporation",
+    "previous_close": 174.08,
+    "price": 177.00999450683594,
+    "week_52_high": 177.43,
+    "week_52_low": 110.39
+  },
+  "source": "yfinance",
+  "ticker": "XOM"
+}

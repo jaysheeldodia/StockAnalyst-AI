@@ -42,6 +42,7 @@ class _FallbackCollection:
         scored.sort(key=lambda item: item[0])
         top = scored[:n_results]
         return {
+            "ids": [[item["id"] for _, item in top]],
             "documents": [[item["document"] for _, item in top]],
             "metadatas": [[item["metadata"] for _, item in top]],
             "distances": [[score for score, _ in top]],
@@ -72,7 +73,10 @@ class ChromaStore:
         documents = result.get("documents", [[]])[0]
         metadatas = result.get("metadatas", [[]])[0]
         distances = result.get("distances", [[]])[0]
+        ids = (result.get("ids") or [[]])[0] or [None] * len(documents)
         return [
-            {"text": doc, "metadata": meta or {}, "distance": distance}
-            for doc, meta, distance in zip(documents, metadatas, distances, strict=False)
+            {"id": doc_id, "text": doc, "metadata": meta or {}, "distance": distance}
+            for doc_id, doc, meta, distance in zip(
+                ids, documents, metadatas, distances, strict=False
+            )
         ]
