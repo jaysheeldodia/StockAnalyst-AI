@@ -93,6 +93,21 @@ def _prior_costs(profile: str) -> tuple[float | None, float | None, str | None]:
     return None, None, None
 
 
+class _ErrorCapture(logging.Handler):
+    """Collects ERROR records the agent logs and swallows (e.g. a rejected API key)."""
+
+    def __init__(self) -> None:
+        super().__init__(level=logging.ERROR)
+        self.messages: list[str] = []
+
+    def emit(self, record: logging.LogRecord) -> None:
+        msg = f"{record.name}: {record.getMessage()}"
+        if record.exc_info and record.exc_info[1] is not None:
+            exc = record.exc_info[1]
+            msg += f" [{type(exc).__name__}: {str(exc)[:200]}]"
+        self.messages.append(msg)
+
+
 class Budget:
     def __init__(self, max_usd: float | None, est_analysis: float | None, est_judge: float | None):
         self.max_usd = max_usd
@@ -193,6 +208,10 @@ async def run(profile: str, max_cases: int | None, max_usd: float | None) -> dic
             continue
         analysis: dict[str, Any] = {"ticker": ticker, "horizon": horizon, "error": None}
         state: dict | None = None
+        capture = _ErrorCapture()
+        app_logger = logging.getLogger("app")
+        app_logger.addHandler(capture)
+        app_logger.propagate = False
         with get_usage_metadata_callback() as usage_cb:
             t0 = time.perf_counter()
             try:
@@ -200,9 +219,18 @@ async def run(profile: str, max_cases: int | None, max_usd: float | None) -> dic
             except Exception as exc:
                 analysis["error"] = f"{type(exc).__name__}: {exc}"
                 analysis["traceback"] = traceback.format_exc()
-                logger.error("analysis failed for %s: %s", ticker, analysis["error"])
+            finally:
+                app_logger.removeHandler(capture)
+                app_logger.propagate = True
             analysis["latency_s"] = time.perf_counter() - t0
             usage = dict(usage_cb.usage_metadata)
+        analysis["internal_errors"] = capture.messages
+        if capture.messages and not analysis["error"]:
+            analysis["error"] = (
+                f"agent logged {len(capture.messages)} internal error(s); first: {capture.messages[0]}"
+            )
+        if analysis["error"]:
+            logger.error("analysis failed for %s: %s", ticker, analysis["error"])
 
         in_tok = sum(u.get("input_tokens", 0) for u in usage.values())
         out_tok = sum(u.get("output_tokens", 0) for u in usage.values())
