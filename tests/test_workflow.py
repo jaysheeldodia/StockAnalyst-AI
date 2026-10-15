@@ -9,9 +9,19 @@ from app.config import get_config
 from app.services.analysis_service import AnalysisService
 
 
-@pytest.mark.asyncio
-async def test_analysis_workflow_generates_report(monkeypatch: pytest.MonkeyPatch) -> None:
+@pytest.fixture
+def no_llm(monkeypatch: pytest.MonkeyPatch):
+    # get_config() is cached; without clearing it, a key loaded earlier from .env reaches the LLM.
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    get_config.cache_clear()
+    yield
+    get_config.cache_clear()
+
+
+@pytest.mark.asyncio
+async def test_analysis_workflow_generates_report(
+    monkeypatch: pytest.MonkeyPatch, no_llm: None
+) -> None:
 
     async def _fake_market(ticker: str) -> dict:
         return {
