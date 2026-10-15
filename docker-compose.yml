@@ -1,0 +1,19 @@
+services:
+  api:
+    build: .
+    image: stock-analyst-api:local
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      NEWS_DATA_MODE: ${NEWS_DATA_MODE:-mock}
+      FINANCIAL_DATA_MODE: ${FINANCIAL_DATA_MODE:-mock}
+      SOCIAL_DATA_MODE: ${SOCIAL_DATA_MODE:-mock}
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2:-false}
+    volumes:
+      - api-data:/app/data
+
+volumes:
+  api-data:
