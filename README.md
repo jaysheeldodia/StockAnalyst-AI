@@ -91,11 +91,12 @@ Common commands (see `Makefile`):
 ## Results
 
 Source: [`evals/baseline.json`](evals/baseline.json), which holds the result files
-`63f35dc-20261015T000634.json` (smoke) and `63f35dc-20261015T000638.json` (full). Run
-conditions: commit `63f35dc`, dataset sha256 `d8d7903c3c12beb5…`, all `*_DATA_MODE=mock`,
-replayed market fixtures, Ragas 0.4.3, `top_k=5`, and **agent LLM off**
-(`agent_llm_configured: false`, the template report path). The judged layer has not run
-yet, so its four metrics read `n/a`.
+`dadc27c-20261015T002414.json` (smoke) and `dadc27c-20261015T002417.json` (full). Run
+conditions: clean commit `dadc27c`, dataset sha256 `d8d7903c3c12beb5…`, all
+`*_DATA_MODE=mock`, replayed market fixtures, Ragas 0.4.3, `top_k=5`, host `Darwin-arm64`,
+and **agent LLM off** (`agent_llm_configured: false`, the template report path). The judged
+layer has not run yet, so its four metrics read `n/a`. Latency is gated only against a
+baseline from the same host, so CI needs its own baseline before it gates latency.
 
 | metric | smoke (5 cases) | full (60 cases) |
 |---|---|---|
@@ -109,9 +110,9 @@ yet, so its four metrics read `n/a`.
 | `answer_relevancy` | n/a | n/a |
 | `context_precision` | n/a | n/a |
 | `context_recall` | n/a | n/a |
-| `latency_p50` | 0.33s | 0.31s |
-| `latency_p95` | 0.61s | 0.61s |
-| `latency_p99` | 0.66s | 0.66s |
+| `latency_p50` | 0.34s | 0.33s |
+| `latency_p95` | 0.63s | 0.59s |
+| `latency_p99` | 0.69s | 0.64s |
 | `mean_usd_per_report` | $0.000000 | $0.000000 |
 | `mean_tokens_per_report` | 0 | 0 |
 | `failure_rate` | 0.000 | 0.000 |

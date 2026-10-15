@@ -2,13 +2,13 @@
   "schema": 1,
   "profiles": {
     "smoke": {
-      "source_file": "63f35dc-20261015T000634.json",
+      "source_file": "dadc27c-20261015T002414.json",
       "meta": {
         "profile": "smoke",
-        "git_sha": "63f35dc",
-        "git_dirty": true,
-        "started_at_utc": "2026-10-15T00:06:34.265079+00:00",
-        "finished_at_utc": "2026-10-15T00:06:37.722333+00:00",
+        "git_sha": "dadc27c",
+        "git_dirty": false,
+        "started_at_utc": "2026-10-15T00:24:14.228490+00:00",
+        "finished_at_utc": "2026-10-15T00:24:17.388185+00:00",
         "dataset_path": "evals/golden/stock_qa.jsonl",
         "dataset_sha256": "d8d7903c3c12beb5c6810d7b3f48f7e88e2476e5858fa0570091b56221a6cb7e",
         "model": "gpt-4o-mini",
@@ -33,7 +33,8 @@
         "pricing_source": "https://platform.openai.com/docs/pricing (accessed 2026-10-14)",
         "max_cases": null,
         "max_usd": null,
-        "python": "3.14.7"
+        "python": "3.14.7",
+        "host": "Darwin-arm64"
       },
       "summary": {
         "metrics": {
@@ -89,9 +90,9 @@
           }
         },
         "latency_s": {
-          "p50": 0.3299498750020575,
-          "p95": 0.6065828327991767,
-          "p99": 0.6613482993590878,
+          "p50": 0.33786049999980605,
+          "p95": 0.6283747913992556,
+          "p99": 0.6862049246790412,
           "n": 5,
           "reason": null
         },
@@ -118,13 +119,13 @@
       }
     },
     "full": {
-      "source_file": "63f35dc-20261015T000638.json",
+      "source_file": "dadc27c-20261015T002417.json",
       "meta": {
         "profile": "full",
-        "git_sha": "63f35dc",
-        "git_dirty": true,
-        "started_at_utc": "2026-10-15T00:06:38.148121+00:00",
-        "finished_at_utc": "2026-10-15T00:06:41.580849+00:00",
+        "git_sha": "dadc27c",
+        "git_dirty": false,
+        "started_at_utc": "2026-10-15T00:24:17.771477+00:00",
+        "finished_at_utc": "2026-10-15T00:24:20.907404+00:00",
         "dataset_path": "evals/golden/stock_qa.jsonl",
         "dataset_sha256": "d8d7903c3c12beb5c6810d7b3f48f7e88e2476e5858fa0570091b56221a6cb7e",
         "model": "gpt-4o-mini",
@@ -149,7 +150,8 @@
         "pricing_source": "https://platform.openai.com/docs/pricing (accessed 2026-10-14)",
         "max_cases": null,
         "max_usd": null,
-        "python": "3.14.7"
+        "python": "3.14.7",
+        "host": "Darwin-arm64"
       },
       "summary": {
         "metrics": {
@@ -205,9 +207,9 @@
           }
         },
         "latency_s": {
-          "p50": 0.31171366600028705,
-          "p95": 0.6057162415971106,
-          "p99": 0.6597987483169708,
+          "p50": 0.3336316249988158,
+          "p95": 0.5949040246006916,
+          "p99": 0.6430169377205311,
           "n": 5,
           "reason": null
         },
