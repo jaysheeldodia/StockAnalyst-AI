@@ -75,8 +75,10 @@ def select_rows(rows: list[dict], profile: str, max_cases: int | None) -> list[d
     return rows
 
 
-def _prior_costs(profile: str) -> tuple[float | None, float | None, str | None]:
-    """Measured (usd per analysis, usd per judged case, file) from the newest same-profile run."""
+def _prior_costs(
+    profile: str, agent_llm: bool
+) -> tuple[float | None, float | None, str | None]:
+    """Measured (usd per analysis, usd per judged case, file) from the newest comparable run."""
     if not RESULTS.exists():
         return None, None, None
     for path in sorted(RESULTS.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
@@ -84,11 +86,14 @@ def _prior_costs(profile: str) -> tuple[float | None, float | None, str | None]:
             res = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        if res.get("meta", {}).get("profile") != profile:
+        meta = res.get("meta", {})
+        if meta.get("profile") != profile or meta.get("agent_llm_configured") != agent_llm:
             continue
         s = res["summary"]
         per_analysis = s["mean_usd_per_report"]["value"]
         per_judge = s.get("judge_usd_per_case")
+        if per_analysis is None and per_judge is None:
+            continue
         return per_analysis, per_judge, path.name
     return None, None, None
 
@@ -179,7 +184,7 @@ async def run(profile: str, max_cases: int | None, max_usd: float | None) -> dic
     service = AnalysisService()
 
     rows = select_rows(load_rows(), profile, max_cases)
-    est_analysis, est_judge, est_file = _prior_costs(profile)
+    est_analysis, est_judge, est_file = _prior_costs(profile, bool(cfg.openai_api_key))
     groups: OrderedDict[tuple[str, str], list[dict]] = OrderedDict()
     for r in rows:
         groups.setdefault((r["ticker"], r["horizon"]), []).append(r)
