@@ -1,0 +1,237 @@
+{
+  "schema": 1,
+  "profiles": {
+    "smoke": {
+      "source_file": "63f35dc-20261015T000634.json",
+      "meta": {
+        "profile": "smoke",
+        "git_sha": "63f35dc",
+        "git_dirty": true,
+        "started_at_utc": "2026-10-15T00:06:34.265079+00:00",
+        "finished_at_utc": "2026-10-15T00:06:37.722333+00:00",
+        "dataset_path": "evals/golden/stock_qa.jsonl",
+        "dataset_sha256": "d8d7903c3c12beb5c6810d7b3f48f7e88e2476e5858fa0570091b56221a6cb7e",
+        "model": "gpt-4o-mini",
+        "agent_llm_configured": false,
+        "judge_enabled": false,
+        "judge_model": null,
+        "judge_embedding_model": null,
+        "judge_embedding_cost": "not counted (embedding tokens are not reported by Ragas)",
+        "ragas_version": "0.4.3",
+        "data_modes": {
+          "news_data_mode": "mock",
+          "financial_data_mode": "mock",
+          "social_data_mode": "mock"
+        },
+        "market_data": "replayed fixtures (evals/fixtures/market)",
+        "retrieval": {
+          "collection_name": "stock_documents",
+          "top_k": 5,
+          "hyde_enabled": true,
+          "rerank_enabled": false
+        },
+        "pricing_source": "https://platform.openai.com/docs/pricing (accessed 2026-10-14)",
+        "max_cases": null,
+        "max_usd": null,
+        "python": "3.14.7"
+      },
+      "summary": {
+        "metrics": {
+          "citation_coverage": {
+            "value": 0.23333333333333334,
+            "n": 5,
+            "reason": null
+          },
+          "unsupported_number_rate": {
+            "value": 0.72,
+            "n": 5,
+            "reason": null
+          },
+          "ticker_accuracy": {
+            "value": 1.0,
+            "n": 5,
+            "reason": null
+          },
+          "disclaimer_present": {
+            "value": 1.0,
+            "n": 5,
+            "reason": null
+          },
+          "refusal_accuracy": {
+            "value": null,
+            "n": 0,
+            "reason": "no must_refuse case in this run"
+          },
+          "answer_key_recall": {
+            "value": 0.0,
+            "n": 5,
+            "reason": null
+          },
+          "faithfulness": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          },
+          "answer_relevancy": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          },
+          "context_precision": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          },
+          "context_recall": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          }
+        },
+        "latency_s": {
+          "p50": 0.3299498750020575,
+          "p95": 0.6065828327991767,
+          "p99": 0.6613482993590878,
+          "n": 5,
+          "reason": null
+        },
+        "mean_usd_per_report": {
+          "value": 0.0,
+          "n": 5,
+          "reason": null
+        },
+        "mean_tokens_per_report": {
+          "value": 0.0,
+          "n": 5,
+          "reason": null
+        },
+        "judge_total_usd": 0.0,
+        "failure_rate": {
+          "value": 0.0,
+          "n": 5,
+          "failures": 0,
+          "reason": null
+        },
+        "cases_skipped": 0,
+        "judge_usd_per_case": null,
+        "total_usd": 0.0
+      }
+    },
+    "full": {
+      "source_file": "63f35dc-20261015T000638.json",
+      "meta": {
+        "profile": "full",
+        "git_sha": "63f35dc",
+        "git_dirty": true,
+        "started_at_utc": "2026-10-15T00:06:38.148121+00:00",
+        "finished_at_utc": "2026-10-15T00:06:41.580849+00:00",
+        "dataset_path": "evals/golden/stock_qa.jsonl",
+        "dataset_sha256": "d8d7903c3c12beb5c6810d7b3f48f7e88e2476e5858fa0570091b56221a6cb7e",
+        "model": "gpt-4o-mini",
+        "agent_llm_configured": false,
+        "judge_enabled": false,
+        "judge_model": null,
+        "judge_embedding_model": null,
+        "judge_embedding_cost": "not counted (embedding tokens are not reported by Ragas)",
+        "ragas_version": "0.4.3",
+        "data_modes": {
+          "news_data_mode": "mock",
+          "financial_data_mode": "mock",
+          "social_data_mode": "mock"
+        },
+        "market_data": "replayed fixtures (evals/fixtures/market)",
+        "retrieval": {
+          "collection_name": "stock_documents",
+          "top_k": 5,
+          "hyde_enabled": true,
+          "rerank_enabled": false
+        },
+        "pricing_source": "https://platform.openai.com/docs/pricing (accessed 2026-10-14)",
+        "max_cases": null,
+        "max_usd": null,
+        "python": "3.14.7"
+      },
+      "summary": {
+        "metrics": {
+          "citation_coverage": {
+            "value": 0.23333333333333334,
+            "n": 60,
+            "reason": null
+          },
+          "unsupported_number_rate": {
+            "value": 0.72,
+            "n": 60,
+            "reason": null
+          },
+          "ticker_accuracy": {
+            "value": 1.0,
+            "n": 60,
+            "reason": null
+          },
+          "disclaimer_present": {
+            "value": 1.0,
+            "n": 60,
+            "reason": null
+          },
+          "refusal_accuracy": {
+            "value": 0.0,
+            "n": 10,
+            "reason": null
+          },
+          "answer_key_recall": {
+            "value": 0.02333333333333333,
+            "n": 50,
+            "reason": null
+          },
+          "faithfulness": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          },
+          "answer_relevancy": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          },
+          "context_precision": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          },
+          "context_recall": {
+            "value": null,
+            "n": 0,
+            "reason": "judge disabled (set EVAL_JUDGE=1)"
+          }
+        },
+        "latency_s": {
+          "p50": 0.31171366600028705,
+          "p95": 0.6057162415971106,
+          "p99": 0.6597987483169708,
+          "n": 5,
+          "reason": null
+        },
+        "mean_usd_per_report": {
+          "value": 0.0,
+          "n": 5,
+          "reason": null
+        },
+        "mean_tokens_per_report": {
+          "value": 0.0,
+          "n": 5,
+          "reason": null
+        },
+        "judge_total_usd": 0.0,
+        "failure_rate": {
+          "value": 0.0,
+          "n": 60,
+          "failures": 0,
+          "reason": null
+        },
+        "cases_skipped": 0,
+        "judge_usd_per_case": null,
+        "total_usd": 0.0
+      }
+    }
+  }
+}
